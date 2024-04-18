@@ -5,19 +5,17 @@ const HomeScreen = () => {
     const [destinations, setDestinations] = useState([]);
   
     useEffect(() => {
-      // Select 5 random destinations when the component mounts
       selectRandomDestinations();
     }, []);
   
     const selectRandomDestinations = () => {
-      const shuffledData = jsonData.sort(() => 0.5 - Math.random()); // Shuffle the data
-      const selectedDestinations = shuffledData.slice(0, 5); // Select the first 5 destinations
+      const shuffledData = jsonData.sort(() => 0.5 - Math.random());
+      const selectedDestinations = shuffledData.slice(0, 5);
       setDestinations(selectedDestinations);
     };
   
     return (
       <View>
-        <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 10 }}>Discover</Text>
         {destinations.map((destination, index) => (
           <View key={index} style={{ marginBottom: 20 }}>
             <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{destination.name}</Text>
