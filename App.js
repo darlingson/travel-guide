@@ -7,6 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import HomeScreen from './src/screens/HomeScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
+import SearchScreen from './src/screens/SearchScreen';
 
 const Tab = createBottomTabNavigator();
 export default function App() {
@@ -47,13 +48,16 @@ function MyTabs() {
           else if (route.name === 'Profile') {
             iconName = focused ? 'person' : 'person-outline';
           }
-          // You can return any component that you like here!
+          else if (route.name === 'Search') {
+            iconName = focused ? 'search' : 'search-outline';
+          }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
         tabBarActiveTintColor: 'tomato',
         tabBarInactiveTintColor: 'gray',
       })}>
-      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Discover" component={HomeScreen} />
+      <Tab.Screen name="Search" component={SearchScreen} />
       <Tab.Screen name='Profile' component={ProfileScreen} />
       <Tab.Screen name="Settings" component={SettingsScreen} />
     </Tab.Navigator>
