@@ -1,35 +1,53 @@
-import React, { useEffect, useState } from 'react';
-import {View, Text, StyleSheet, Button} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { ScrollView, View, Text, Image, Dimensions } from 'react-native';
+import { Button, Card } from 'react-native-paper';
+import Carousel from 'react-native-snap-carousel';
 import jsonData from '../../assets/data.json';
-const HomeScreen = () => {
-    const [destinations, setDestinations] = useState([]);
-  
-    useEffect(() => {
-      selectRandomDestinations();
-    }, []);
-  
-    const selectRandomDestinations = () => {
-      const shuffledData = jsonData.sort(() => 0.5 - Math.random());
-      const selectedDestinations = shuffledData.slice(0, 5);
-      setDestinations(selectedDestinations);
-    };
-  
+
+const windowWidth = Dimensions.get('window').width;
+
+const HomePage = () => {
+  const [destinations, setDestinations] = useState([]);
+
+  useEffect(() => {
+    selectRandomDestinations();
+  }, []);
+
+  const selectRandomDestinations = () => {
+    const shuffled = jsonData.sort(() => 0.5 - Math.random());
+    setDestinations(shuffled.slice(0, 5));
+  };
+
+  const renderCarouselItem = ({ item }) => {
     return (
-      <View>
-        {destinations.map((destination, index) => (
-          <View key={index} style={{ marginBottom: 20 }}>
-            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{destination.name}</Text>
-            <Text>{destination.description}</Text>
-            {/* You can display other destination details here */}
-          </View>
-        ))}
-        <Button title="Discover More" onPress={selectRandomDestinations} />
-      </View>
+      <Image
+        source={{ uri: item }}
+        style={{ width: windowWidth - 40, height: 200, borderRadius: 8 }}
+        resizeMode="cover"
+      />
     );
   };
 
-const styles = StyleSheet.create({
-  container: {flex: 1, justifyContent: 'center', alignItems: 'center'},
-});
+  return (
+    <ScrollView contentContainerStyle={{ padding: 20 }}>
+      {destinations.map((destination, index) => (
+        <Card key={destination.id}>
+          <Card.Title title={destination.name} />
+          {console.log(destination.imagePaths)}
+          <Carousel
+            data={destination.imagePaths} // Using imagePaths array from each destination
+            renderItem={renderCarouselItem}
+            sliderWidth={windowWidth}
+            itemWidth={windowWidth}
+          />
+          <Card.Content>
+            <Text>{destination.description}</Text>
+          </Card.Content>
+        </Card>
+      ))}
+      <Button title="Discover More" onPress={selectRandomDestinations} />
+    </ScrollView>
+  );
+};
 
-export default HomeScreen;
+export default HomePage;
