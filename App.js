@@ -6,6 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import HomeScreen from './src/screens/HomeScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
+import ProfileScreen from './src/screens/ProfileScreen';
 
 const Tab = createBottomTabNavigator();
 export default function App() {
@@ -39,11 +40,13 @@ function MyTabs() {
           let iconName;
 
           if (route.name === 'Home') {
-            iconName = focused ? 'ios-home' : 'ios-home-outline';
+            iconName = focused ? 'home' : 'home-outline';
           } else if (route.name === 'Settings') {
-            iconName = focused ? 'ios-settings' : 'ios-settings-outline';
+            iconName = focused ? 'settings' : 'settings-outline';
           }
-
+          else if (route.name === 'Profile') {
+            iconName = focused ? 'person' : 'person-outline';
+          }
           // You can return any component that you like here!
           return <Ionicons name={iconName} size={size} color={color} />;
         },
@@ -51,6 +54,7 @@ function MyTabs() {
         tabBarInactiveTintColor: 'gray',
       })}>
       <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name='Profile' component={ProfileScreen} />
       <Tab.Screen name="Settings" component={SettingsScreen} />
     </Tab.Navigator>
   );
