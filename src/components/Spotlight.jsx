@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, View, Text, Image, Dimensions } from 'react-native';
+import { ScrollView, View, Text, Image, Dimensions, StyleSheet } from 'react-native';
 import { ActivityIndicator, Button, Card } from 'react-native-paper';
+import colors from '../../assets/styles/colors';
 
 const Spotlight = () => {
     const [spotlight, setSpotlight] = useState([]);
@@ -23,7 +24,7 @@ const Spotlight = () => {
         <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 10 }}>Spotlight</Text>
         {isLoading ? <ActivityIndicator/>:
         <ScrollView contentContainerStyle={{ padding: 10 }}>
-            <Card>
+            <Card style={styles.card}>
                 <Card.Title title={spotlight.name} />
                 <Card.Content>
                     <Text>
@@ -39,5 +40,23 @@ const Spotlight = () => {
         </View>
     );
 }
-
+const styles = StyleSheet.create({
+    container : {
+      backgroundColor:colors.primary,
+      paddingTop :20,
+      paddingBottom :20
+    },
+    card: {
+      backgroundColor:colors.secondary,
+      paddingTop :20,
+      paddingBottom :20,
+      opacity: 0.8,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      elevation: 5,
+      marginBottom:20
+    }
+  });
 export default Spotlight;
