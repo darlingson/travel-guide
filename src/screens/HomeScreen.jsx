@@ -7,38 +7,47 @@ import img from '../../assets/images/image1.jpg';
 const windowWidth = Dimensions.get('window').width;
 
 const HomePage = () => {
-  const [destinations, setDestinations] = useState([]);
+  const [recommendations, setRecommendations] = useState([]);
 
   useEffect(() => {
-    selectRandomDestinations();
+    fetchRecommendations();
   }, []);
 
-  const selectRandomDestinations = () => {
-    const shuffled = jsonData.sort(() => 0.5 - Math.random());
-    setDestinations(shuffled.slice(0, 5));
+  const fetchRecommendations = () => {
+    // const shuffled = jsonData.sort(() => 0.5 - Math.random());
+    // setDestinations(shuffled.slice(0, 5));
+    fetch('https://darlingson.pythonanywhere.com/destinations')
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setRecommendations(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
     <ScrollView contentContainerStyle={{ padding: 20 }}>
-      {destinations.map((destination, index) => (
+      {recommendations.map((destination, index) => (
         <Card key={destination.id}>
           <Card.Title title={destination.name} />
           <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-            {destination.imagePaths.map((imagePath, index) => (
+            {/* {destination.imagePaths.map((imagePath, index) => (
               <Image
                 key={index}
                 style={{ width: windowWidth / 2 - 30, height: 100, margin: 5, borderRadius: 8 }}
                 source={img }
                 resizeMode="cover"
               />
-            ))}
+            ))} */}
           </View>
           <Card.Content>
             <Text>{destination.description}</Text>
           </Card.Content>
         </Card>
       ))}
-      <Button title="Discover More" onPress={selectRandomDestinations} />
+      <Button title="Discover More" onPress={fetchRecommendations} />
     </ScrollView>
   );
 };
