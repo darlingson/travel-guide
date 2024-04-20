@@ -19,7 +19,7 @@ const HomePage = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        setRecommendations(data);
+        setRecommendations(data.slice(0,5));
       })
       .catch((error) => {
         console.error(error);
