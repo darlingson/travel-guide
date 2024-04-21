@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import { ScrollView, View,ActivityIndicator, StyleSheet } from "react-native";
+import { ScrollView, View,ActivityIndicator, StyleSheet, TouchableOpacity } from "react-native";
 import { Card, Text } from "react-native-paper";
 import colors from "../../assets/styles/colors";
+import { useNavigation } from "@react-navigation/native";
 const Recommendations = () => {
     const [recommendations, setRecommendations] = useState([]);
     const [isLoading,setIsLoading] = useState(true);
+    const navigation = useNavigation();
     useEffect(() => {
       fetchRecommendations();
     }, []);
@@ -22,13 +24,16 @@ const Recommendations = () => {
           setIsLoading(false);
         });
     };
-  
+    const handleCardPress = (destination) => {
+      navigation.navigate('DetailsScreen', { destination });
+  };
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 10 }}>Recommendations</Text>
             {isLoading? <ActivityIndicator/>:
             <>
             {recommendations.map((destination, index) => (
+              <TouchableOpacity key={destination.id} onPress={() => handleCardPress(destination)}>
                 <Card key={destination.id} style={styles.card}>
                 <Card.Title title={destination.name} style={{ fontSize: 20, fontWeight: 'bold' }}/>
                 <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
@@ -37,6 +42,7 @@ const Recommendations = () => {
                     <Text>{destination.description}</Text>
                 </Card.Content>
                 </Card>
+                </TouchableOpacity>
             ))}
             </>
             }

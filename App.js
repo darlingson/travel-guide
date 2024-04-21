@@ -9,14 +9,9 @@ import SettingsScreen from './src/screens/SettingsScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import SearchScreen from './src/screens/SearchScreen';
 import colors from './assets/styles/colors';
-
 const Tab = createBottomTabNavigator();
 export default function App() {
   return (
-    // <View style={styles.container}>
-    //   <Text>Open up App.js to start working on your app!</Text>
-    //   <StatusBar style="auto" />
-    // </View>
     <NavigationContainer>
     <MyTabs />
   </NavigationContainer>

@@ -6,16 +6,37 @@ import img from '../../assets/images/image1.jpg';
 import Spotlight from '../components/Spotlight';
 import Recommendations from '../components/Recommendations';
 import colors from '../../assets/styles/colors';
+import { createStackNavigator } from '@react-navigation/stack';
+import DetailsScreen from './DetailsScreen';
 
 const windowWidth = Dimensions.get('window').width;
 
-const HomePage = () => {
- 
+const Stack = createStackNavigator();
+const HomePage = ({ navigation }) => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Home"
+        component={HomeContent}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen name="DetailsScreen" component={DetailsScreen} />
+    </Stack.Navigator>
+  );
+};
+
+const HomeContent = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Spotlight/>
-      <Recommendations/>
-      <Button title="Discover More" onPress={()=>{console.log("Hi")}} style={styles.button} />
+      <Spotlight />
+      <Recommendations />
+      <Button
+        title="Discover More"
+        onPress={() => {
+          console.log("Hi");
+        }}
+        style={styles.button}
+      />
     </ScrollView>
   );
 };
@@ -25,8 +46,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     padding: 20
   },
-  button:{
-    backgroundColor:colors.primary
+  button: {
+    backgroundColor: colors.primary
   }
 });
+
 export default HomePage;
