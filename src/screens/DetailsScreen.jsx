@@ -1,5 +1,6 @@
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View, Image } from "react-native";
 import { Text } from "react-native-paper";
+import PagerView from 'react-native-pager-view';
 import colors from "../../assets/styles/colors";
 function DetailsScreen({ route }) {
   const { destination } = route.params;
@@ -13,6 +14,17 @@ function DetailsScreen({ route }) {
     return (
       <ScrollView contentContainerStyle={style.container}>
         <Text>Details Screen</Text>
+        <PagerView initialPage={0} style={style.pager}>
+        {
+          processedImageUrls.map((url, index) => {
+            return (
+              <View key={index}>
+                <Image source={{ uri: url }} style={{ width: '100%', height: 300 }} />
+              </View>
+            );
+          })
+        }
+        </PagerView>
         <Text>Name: {destination.name}</Text>
         <Text>Description: {destination.description}</Text>
       </ScrollView>
@@ -25,5 +37,12 @@ const style = StyleSheet.create({
     alignItems: "left",
     justifyContent: "left",
   },
+  page: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  pager:{
+    flex:1
+  }
 });
   export default DetailsScreen
