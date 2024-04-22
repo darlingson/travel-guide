@@ -1,20 +1,63 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import HomeScreen from './src/screens/HomeScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import SearchScreen from './src/screens/SearchScreen';
 import colors from './assets/styles/colors';
+import PagerView from 'react-native-pager-view';
+import { useEffect, useState } from 'react';
+import { Button } from 'react-native-paper';
 const Tab = createBottomTabNavigator();
+
+/*
+To add the welcome screens
+- create two new components
+1. the first component will house the main app component
+2. the second component will house the onboarding screens
+
+- the app will check in local storage to see if the user has already been onboarded, if not the app will render the onboarding screens, after onboarding the app will render the main app
+- if the user has already been onboarded, the app will render the main app
+*/
+
 export default function App() {
+  const [onBoarded, setOnBoarded] = useState(false);
+  const [gettingOnBoardingStatus, setGettingOnBoardingStatus] = useState(true);
+
+  useEffect(() => {
+    getOnBoardingStatus();
+  }, []);
+
+  const getOnBoardingStatus = async () => {
+    try {
+      const value = await AsyncStorage.getItem('onBoardingStatus');
+      if (value !== null) {
+        setOnBoarded(value);
+      }
+      else {
+        setOnBoarded(false);
+      }
+      setGettingOnBoardingStatus(false);
+    } catch (e) {
+      console.log(e);
+    }
+    console.log(onBoarded);
+  }
+  const handleFinishOnBoarding = () => {
+    console.log('finished onboarding');
+    setOnBoarded(true);
+  }
   return (
-    <NavigationContainer>
-    <MyTabs />
-  </NavigationContainer>
+    <>
+      {gettingOnBoardingStatus && <Text>Loading</Text>}
+      {
+        onBoarded ? <MainApp /> : <OnBoarding onFinishOnBoarding={handleFinishOnBoarding} />
+      }
+    </>
   );
 }
 
@@ -25,6 +68,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  button: {
+    backgroundColor: colors.primary
+  }
 });
 
 
@@ -32,8 +78,8 @@ const styles = StyleSheet.create({
 function MyTabs() {
   return (
     <Tab.Navigator
-      screenOptions={({route}) => ({
-        tabBarIcon: ({focused, color, size}) => {
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
           if (route.name === 'Discover') {
@@ -57,5 +103,37 @@ function MyTabs() {
       <Tab.Screen name='Profile' component={ProfileScreen} />
       <Tab.Screen name="Settings" component={SettingsScreen} />
     </Tab.Navigator>
+  );
+}
+
+const MainApp = () => {
+  return (
+    <NavigationContainer>
+      <MyTabs />
+    </NavigationContainer>
+  );
+}
+const OnBoarding = ({ onFinishOnBoarding }) => {
+  return (
+    <>
+      <PagerView initialPage={0} style={{ flex: 1 }}>
+        <View key={0} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text>Intro Screen</Text>
+        </View>
+        <View key={1} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text>Onboarding Screen</Text>
+        </View>
+        <View key={2} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text>SignUp Screen</Text>
+        </View>
+        <View key={3} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text>Welcome Screen</Text>
+          <TouchableOpacity onPress={onFinishOnBoarding} style={{ backgroundColor: 'blue', marginTop: 20, padding: 10, borderRadius: 5 }}>
+            <Text style={{ color: 'white' }}>Finish Onboarding</Text>
+          </TouchableOpacity>
+        </View>
+
+      </PagerView>
+    </>
   );
 }

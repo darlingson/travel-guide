@@ -15,7 +15,7 @@ const Recommendations = () => {
       fetch('https://darlingson.pythonanywhere.com/destinations')
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
+          // console.log(data);s
           setRecommendations(data.slice(0,5));
           setIsLoading(false);
         })
