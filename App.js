@@ -15,6 +15,7 @@ import { Button } from 'react-native-paper';
 import IntroScreen from './src/screens/onboarding/IntroScreen';
 import OnBoardingScreen from './src/screens/onboarding/OnBoardingScreen';
 import SignUpScreen from './src/screens/onboarding/SignUpScreen';
+import { ImageBackground } from 'react-native';
 const Tab = createBottomTabNavigator();
 
 /*
@@ -130,22 +131,25 @@ const OnBoarding = ({ onFinishOnBoarding }) => {
   }
   return (
     <>
-      <PagerView ref={pagerRef}  initialPage={0} style={{ flex: 1 }}>
+      <PagerView ref={pagerRef} initialPage={0} style={{ flex: 1 }}>
         <View key={0}>
           <IntroScreen onNextClicked={onNextClicked} />
         </View>
         <View key={1}>
-          <OnBoardingScreen onNextClicked={onNextClicked}/>
+          <OnBoardingScreen onNextClicked={onNextClicked} />
         </View>
         <View key={2}>
-          {/* <Text>SignUp Screen</Text> */}
-          <SignUpScreen onNextClicked={onNextClicked}/>
+          <SignUpScreen onNextClicked={onNextClicked} />
         </View>
-        <View key={3} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Text>Welcome Screen</Text>
-          <TouchableOpacity onPress={onFinishOnBoarding} style={{ backgroundColor: 'blue', marginTop: 20, padding: 10, borderRadius: 5 }}>
-            <Text style={{ color: 'white' }}>Finish Onboarding</Text>
-          </TouchableOpacity>
+        <View key={3} style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
+          <ImageBackground source={require('./assets/images/Haliaeetus_vocifer_-Cape_Maclear_Malawi_-fishing-8b.jpg')} style={{ flex: 1, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+            <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center', paddingBottom: 50 }}>
+              <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'white', marginBottom: 20 }}>Congratulations on signing up!</Text>
+              <TouchableOpacity onPress={onFinishOnBoarding} style={{ backgroundColor: 'blue', paddingVertical: 12, paddingHorizontal: 30, borderRadius: 5 }}>
+                <Text style={{ color: 'white', fontSize: 16 }}>Finish Onboarding</Text>
+              </TouchableOpacity>
+            </View>
+          </ImageBackground>
         </View>
 
       </PagerView>
