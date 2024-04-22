@@ -10,8 +10,9 @@ import ProfileScreen from './src/screens/ProfileScreen';
 import SearchScreen from './src/screens/SearchScreen';
 import colors from './assets/styles/colors';
 import PagerView from 'react-native-pager-view';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button } from 'react-native-paper';
+import IntroScreen from './src/screens/onboarding/IntroScreen';
 const Tab = createBottomTabNavigator();
 
 /*
@@ -114,11 +115,19 @@ const MainApp = () => {
   );
 }
 const OnBoarding = ({ onFinishOnBoarding }) => {
+  const pagerRef = useRef(null);
+
+  const onNextClicked = () => {
+    if (pagerRef.current) {
+      const nextPage = pagerRef.current.props.initialPage + 1;
+      pagerRef.current.setPage(nextPage);
+    }
+  }
   return (
     <>
-      <PagerView initialPage={0} style={{ flex: 1 }}>
-        <View key={0} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Text>Intro Screen</Text>
+      <PagerView ref={pagerRef}  initialPage={0} style={{ flex: 1 }}>
+        <View key={0}>
+          <IntroScreen onNextClicked={onNextClicked} />
         </View>
         <View key={1} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Text>Onboarding Screen</Text>
@@ -137,3 +146,4 @@ const OnBoarding = ({ onFinishOnBoarding }) => {
     </>
   );
 }
+
