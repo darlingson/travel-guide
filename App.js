@@ -13,6 +13,7 @@ import PagerView from 'react-native-pager-view';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from 'react-native-paper';
 import IntroScreen from './src/screens/onboarding/IntroScreen';
+import OnBoardingScreen from './src/screens/onboarding/OnBoardingScreen';
 const Tab = createBottomTabNavigator();
 
 /*
@@ -116,11 +117,14 @@ const MainApp = () => {
 }
 const OnBoarding = ({ onFinishOnBoarding }) => {
   const pagerRef = useRef(null);
+  const [curPage, setCurPage] = useState(0);
 
   const onNextClicked = () => {
     if (pagerRef.current) {
-      const nextPage = pagerRef.current.props.initialPage + 1;
-      pagerRef.current.setPage(nextPage);
+      // const nextPage = pagerRef.current.props.initialPage + 1;
+      setCurPage(curPage + 1);
+      pagerRef.current.setPage(curPage);
+      console.log(curPage);
     }
   }
   return (
@@ -129,8 +133,8 @@ const OnBoarding = ({ onFinishOnBoarding }) => {
         <View key={0}>
           <IntroScreen onNextClicked={onNextClicked} />
         </View>
-        <View key={1} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Text>Onboarding Screen</Text>
+        <View key={1}>
+          <OnBoardingScreen onNextClicked={onNextClicked}/>
         </View>
         <View key={2} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Text>SignUp Screen</Text>
