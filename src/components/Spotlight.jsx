@@ -10,7 +10,7 @@ const Spotlight = () => {
         fetch('https://darlingson.pythonanywhere.com/destinations/spotlight')
             .then((response) => response.json())
             .then((data) => {
-                console.log(data);
+                // console.log(data);
                 setSpotlight(data);
                 setIsLoading(false);
             })
