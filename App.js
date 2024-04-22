@@ -14,6 +14,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Button } from 'react-native-paper';
 import IntroScreen from './src/screens/onboarding/IntroScreen';
 import OnBoardingScreen from './src/screens/onboarding/OnBoardingScreen';
+import SignUpScreen from './src/screens/onboarding/SignUpScreen';
 const Tab = createBottomTabNavigator();
 
 /*
@@ -136,8 +137,9 @@ const OnBoarding = ({ onFinishOnBoarding }) => {
         <View key={1}>
           <OnBoardingScreen onNextClicked={onNextClicked}/>
         </View>
-        <View key={2} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Text>SignUp Screen</Text>
+        <View key={2}>
+          {/* <Text>SignUp Screen</Text> */}
+          <SignUpScreen onNextClicked={onNextClicked}/>
         </View>
         <View key={3} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Text>Welcome Screen</Text>
