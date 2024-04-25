@@ -30,7 +30,7 @@ const Spotlight = () => {
         <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 10 }}>Spotlight</Text>
         {isLoading ? <ActivityIndicator/>:
         <ScrollView contentContainerStyle={{ padding: 10 }}>
-        <TouchableOpacity key={spotlight.id} onPress={() => handleCardPress(destination)}>
+        <TouchableOpacity key={spotlight.id} onPress={() => handleCardPress(spotlight)}>
             <Card style={styles.card}>
                 <Card.Title title={spotlight.name} />
                 <Card.Content>
