@@ -23,7 +23,14 @@ const SearchScreen = ({ navigation }) => {
       <Stack.Screen
         name="DetailsScreen"
         component={DetailsScreen}
+        options={{ headerShown: false }}
       ></Stack.Screen>
+      <Stack.Screen
+        name="SearchResults"
+        component={SearchResults}
+        options={{ headerShown: false }}
+        >
+      </Stack.Screen>
     </Stack.Navigator>
   );
 
@@ -53,55 +60,68 @@ const SearchScreenMainContent = () => {
   const handleCardPress = (destination) => {
     navigation.navigate('DetailsScreen', { destination });
   };
+  const handleSearch = () => {
+    console.log("value of the search bar is: " + searchText)
+    navigation.navigate('SearchResults', { keywords: searchText })
+  }
+  const truncateDescription = (description) => {
+    const words = description.split(' ');
+    const truncatedDescription = words.slice(0, 10).join(' ');
+    if (words.length > 10) {
+      return truncatedDescription + '...';
+    }
+    return truncatedDescription;
+  };
   return (
     <ScrollView>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <TextInput style={styles.input} value={searchText} onChange={e => setSearchText(e.target.value)}></TextInput>
-        <Pressable style={styles.button} onPress={() => setIsSearchTyped(true)}>
-          <Text style={styles.text}>Search</Text>
-        </Pressable>
-      </View>
-      <ScrollView horizontal>
-        <View style={styles.horizontalScroll}>
-          <Text>Hiking</Text>
-          <Text>Lakes</Text>
-          <Text>Mountains</Text>
-        </View>
-      </ScrollView>
-      <View style={styles.grid}>
-        {isLoading ? <ActivityIndicator /> :
-          <>
-            {!isSearchTyped && suggestions.map((destination, index) => (
-              <TouchableOpacity key={destination.id} onPress={() => handleCardPress(destination)}>
-                <Card key={destination.id} style={styles.card}>
-                  <Card.Title title={destination.name} style={{ fontSize: 20, fontWeight: 'bold' }} />
-                  <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                  </View>
-                  <Card.Content>
-                    <Text>{destination.description}</Text>
-                  </Card.Content>
-                </Card>
-              </TouchableOpacity>
-            ))}
-
-          </>
-        }
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+      <TextInput
+        style={styles.input}
+        value={searchText}
+        onChangeText={(text) => setSearchText(text)}
+        placeholder="Search"
+      />
+      <Pressable style={styles.button} onPress={handleSearch}>
+        <Text style={styles.text}>Search</Text>
+      </Pressable>
+    </View>
+    <ScrollView horizontal>
+      <View style={styles.horizontalScroll}>
+        <Text>Hiking</Text>
+        <Text>Lakes</Text>
+        <Text>Mountains</Text>
       </View>
     </ScrollView>
-
+    <View style={styles.grid}>
+      {isLoading ? <ActivityIndicator /> :
+        <>
+          {suggestions.map((destination, index) => (
+            <TouchableOpacity key={destination.id} onPress={() => handleCardPress(destination)} style={{ width: '100%',justifyContent: 'center', alignItems: 'center' }}>
+              <Card style={{ backgroundColor: colors.secondary, margin: 10, borderRadius: 10,width: '90%' }}>
+                <Card.Title title={destination.name} style={{ fontSize: 20, fontWeight: 'bold' }} />
+                <Card.Content>
+                  <Text>{truncateDescription(destination.description)}</Text>
+                </Card.Content>
+              </Card>
+            </TouchableOpacity>
+          ))}
+        </>
+      }
+    </View>
+  </ScrollView>
   );
 }
-const SearchResults = (props) => {
-  const [results, setResults] = ([])
+const SearchResults = ({route}) => {
+  const [results, setResults] = useState([])
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(true);
+  const {keywords} = route.params
   const fetchResults = () => {
-    fetch('https://darlingson.pythonanywhere.com/destinations/recommendations')
+    fetch('https://darlingson.pythonanywhere.com/destinations/search?keyword=' + keywords)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
-        console.log(props.keywords)
-        setResults(data.slice(0, 10));
+        // console.log(data.results)
+        setResults(data.results);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -119,12 +139,10 @@ const SearchResults = (props) => {
           <>
             {results.map((destination, index) => (
               <TouchableOpacity key={destination.id} onPress={() => navigation.navigate('DetailsScreen', { destination })}>
-                <Card key={destination.id} style={styles.card}>
+                <Card key={destination.id} style={{ backgroundColor: colors.secondary, margin: 10, borderRadius: 10 }}>
                   <Card.Title title={destination.name} style={{ fontSize: 20, fontWeight: 'bold' }} />
-                  <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                  </View>
                   <Card.Content>
-                    <Text>{destination.description}</Text>
+                    <Text>{destination.district}</Text>
                   </Card.Content>
                 </Card>
               </TouchableOpacity>
@@ -163,8 +181,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   card: {
-    width: '48%',
-    margin: '1%',
+    width: '38',
   },
 });
 
