@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity} from 'react-native';
-import {Picker} from '@react-native-picker/picker';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import colors from '../../../assets/styles/colors';
 
 const SignUpScreen = ({ onNextClicked }) => {
@@ -13,14 +13,76 @@ const SignUpScreen = ({ onNextClicked }) => {
     const [country, setCountry] = useState('');
     const [district, setDistrict] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
-    const handleSignUp = () => {
-        // Handle sign-up logic here
-        console.log('Signing up...');
+    // const handleSignUp = () => {
+    //     setIsLoading(true);
+    //     const formData = new FormData();
+    //     formData.append('username', name);
+    //     formData.append('email', email);
+    //     formData.append('password', password);
+    //     formData.append('confirm_password', confirmPassword);
+    //     formData.append('location', location);
+    //     formData.append('favorite_activity', favoriteActivity);
+    //     formData.append('country', country);
+    //     formData.append('district', district);
+    //     formData.append('phone_number', phoneNumber);
+    //     try {
+    //         fetch('http://darlingson.pythonanywhere.com/register', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             body: formData
+    //         })
+    //             .then(response => response.json())
+    //             .then(data => {
+    //                 console.log(data);
+    //             })
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    //     console.log('Signing up...');
+    // };
+
+  
+    const handleSignUp = async () => { 
+        try { 
+            const formData = new FormData();
+            formData.append('username', name);
+            formData.append('email', email);
+            formData.append('password', password);
+            formData.append('confirm_password', confirmPassword);
+            formData.append('location', location);
+            formData.append('favorite_activity', favoriteActivity);
+            formData.append('country', country);
+            formData.append('district', district);
+            formData.append('phone_number', phoneNumber);
+    
+            const response = await fetch( 
+                'http://darlingson.pythonanywhere.com/register',{
+                method: 'POST',
+                body: formData
+            });
+    
+            if (!response.ok) {
+                const responseData = await response.text();
+                throw new Error('Server error: ' + response.status + ', ' + responseData);
+            }
+    
+            const data = await response.json();
+            console.log(data); 
+        } 
+        catch (error) { 
+            console.error(error); 
+        } 
     };
-
+    
     return (
         <View style={styles.container}>
+            {isLoading ? (
+                <Text>Loading...</Text>
+            ) : ""}
             <Text style={styles.title}>Sign Up</Text>
             <TextInput
                 style={styles.input}
