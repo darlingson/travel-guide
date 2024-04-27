@@ -8,7 +8,7 @@ function DetailsScreen({ route }) {
   const [imageIndex,setImageIndex] = useState(0);
   const { destination } = route.params;
   const baseUrl = 'https://darlingson.pythonanywhere.com/destination/image?path=';
-  const onPageSelected = (event) => {
+  const onImageSelected = (event) => {
     setCurrentPage(event.nativeEvent.position);
   };
   // const processedImageUrls = destination.imageUrls.map((imageName) => {
@@ -19,7 +19,7 @@ function DetailsScreen({ route }) {
     return (
       <ScrollView contentContainerStyle={style.container}>
         <Text>Details Screen</Text>
-        <PagerView initialPage={0} style={style.pager} onPageSelected={onPageSelected}>
+        <PagerView initialPage={0} style={style.pager} onPageSelected={onImageSelected}>
           {
             processedImageUrls.map((url, index) => {
               return (
