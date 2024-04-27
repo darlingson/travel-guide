@@ -1,9 +1,25 @@
 import { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import colors from '../../../assets/styles/colors';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignUpScreen = ({ onNextClicked }) => {
+    const [isSignIn, setIsSignIn] = useState(false);
+
+    const handleToggleSignIn = () => {
+        setIsSignIn(!isSignIn);
+    };
+    return (
+        <SafeAreaView>
+        <ScrollView>
+            {isSignIn ? <SignIn onNextClicked={onNextClicked} onSignInToggle={handleToggleSignIn} /> : <SignUp onNextClicked={onNextClicked} onSignInToggle={handleToggleSignIn}/>}
+        </ScrollView>
+        </SafeAreaView>
+    );
+};
+const SignUp =({  onNextClicked, onSignInToggle  }) =>{
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -133,13 +149,80 @@ const SignUpScreen = ({ onNextClicked }) => {
             <TouchableOpacity onPress={handleSignUp} style={styles.button}>
                 <Text style={styles.buttonText}>Sign Up</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={onNextClicked} style={styles.link}>
+            <TouchableOpacity onPress={onSignInToggle} style={styles.link}>
                 <Text style={styles.linkText}>Already have an account? Sign In</Text>
             </TouchableOpacity>
         </View>
     );
-};
-
+}
+const SignIn =({  onNextClicked, onSignInToggle  }) =>{
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [errors, setErrors] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const handleSignIn = async () => {
+        try {
+            setIsLoading(true);
+            const formData = new FormData();
+            formData.append('username', username);
+            formData.append('password', password);
+            const response = await fetch('http://darlingson.pythonanywhere.com/login', {
+                method: 'POST',
+                body: formData
+            });
+            setIsLoading(false);
+            if (!response.ok) {
+                const responseData = await response.json();
+                setErrors(responseData.error);
+                throw new Error('Server error: ' + response.status + ', ' + responseData.error);
+            }
+            else if (response.ok){
+                // const value = await AsyncStorage.getItem('onBoardingStatus');
+                let result
+                try {
+                    result = await AsyncStorage.setItem('onBoardingStatus', 'true');                    
+                    const data = await response.json();
+                    const token = data.token;
+                    await AsyncStorage.setItem('token', token);
+                    console.log(data);
+                } catch (error) {
+                    console.log(error);
+                }
+                onNextClicked();
+            }
+    }
+    catch (error) {
+        setIsLoading(false);
+        console.error(error);
+    }
+    };
+    return (
+        <View style={styles.container}>
+        {errors && <Text style={styles.errorText}>{errors}</Text>}
+            {isLoading && <Text>Signing in</Text> }
+            <Text style={styles.title}>Sign In</Text>
+            <TextInput
+                style={styles.input}
+                placeholder="Username"
+                value={username}
+                onChangeText={setUsername}
+            />
+            <TextInput
+                style={styles.input}
+                placeholder="Password"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+            />
+            <TouchableOpacity onPress={handleSignIn} style={styles.button}>
+                <Text style={styles.buttonText}>Sign In</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={onSignInToggle} style={styles.link}>
+                <Text style={styles.linkText}>Don't have an account? Sign Up</Text>
+            </TouchableOpacity>
+        </View>
+    );
+}
 const styles = StyleSheet.create({
     container: {
         flex: 1,
