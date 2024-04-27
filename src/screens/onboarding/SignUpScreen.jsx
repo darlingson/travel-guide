@@ -14,40 +14,10 @@ const SignUpScreen = ({ onNextClicked }) => {
     const [district, setDistrict] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-
-    // const handleSignUp = () => {
-    //     setIsLoading(true);
-    //     const formData = new FormData();
-    //     formData.append('username', name);
-    //     formData.append('email', email);
-    //     formData.append('password', password);
-    //     formData.append('confirm_password', confirmPassword);
-    //     formData.append('location', location);
-    //     formData.append('favorite_activity', favoriteActivity);
-    //     formData.append('country', country);
-    //     formData.append('district', district);
-    //     formData.append('phone_number', phoneNumber);
-    //     try {
-    //         fetch('http://darlingson.pythonanywhere.com/register', {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json'
-    //             },
-    //             body: formData
-    //         })
-    //             .then(response => response.json())
-    //             .then(data => {
-    //                 console.log(data);
-    //             })
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    //     console.log('Signing up...');
-    // };
-
-  
+    const [errors, setErrors] = useState("");
     const handleSignUp = async () => { 
         try { 
+            setIsLoading(true);
             const formData = new FormData();
             formData.append('username', name);
             formData.append('email', email);
@@ -65,21 +35,27 @@ const SignUpScreen = ({ onNextClicked }) => {
                 body: formData
             });
     
+            setIsLoading(false);
             if (!response.ok) {
                 const responseData = await response.text();
+                setErrors(responseData)
                 throw new Error('Server error: ' + response.status + ', ' + responseData);
             }
-    
+            else if (response.ok){
+                onNextClicked();
+            }
             const data = await response.json();
             console.log(data); 
         } 
         catch (error) { 
+            setIsLoading(false);
             console.error(error); 
         } 
     };
     
     return (
         <View style={styles.container}>
+        {errors && <Text style={styles.errorText}>{errors}</Text>}
             {isLoading ? (
                 <Text>Loading...</Text>
             ) : ""}
