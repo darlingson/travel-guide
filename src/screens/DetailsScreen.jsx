@@ -18,7 +18,6 @@ function DetailsScreen({ route }) {
   let processedImageUrls = ["https://darlingson.pythonanywhere.com/destination/image?path=chingoni_2_by_unesco","https://darlingson.pythonanywhere.com/destination/image?path=chingoni_1_by_unesco"];
     return (
       <ScrollView contentContainerStyle={style.container}>
-        <Text>Details Screen</Text>
         <PagerView initialPage={0} style={style.pager} onPageSelected={onImageSelected}>
           {
             processedImageUrls.map((url, index) => {
@@ -32,8 +31,18 @@ function DetailsScreen({ route }) {
           }
         </PagerView>
         <Text style={style.imageNumber}>{currentPage + 1} of {processedImageUrls.length}</Text>
-        <Text>Name: {destination.name}</Text>
-        <Text>Description: {destination.description}</Text>
+        <View style={style.infoContainer}>
+          <Text style={style.infoHeader}>Name</Text>
+          <Text>{destination.name}</Text>
+        </View>
+        <View style={style.infoContainer}>
+          <Text style={style.infoHeader}>Location</Text>
+          <Text>{destination.location}, {destination.district}</Text>
+        </View>
+        <View style={style.infoContainer}>
+        <Text style={style.infoHeader}>Description</Text>
+        <Text>{destination.description}</Text>
+        </View>
       </ScrollView>
     );
   }
@@ -66,5 +75,25 @@ const style = StyleSheet.create({
     alignItems: 'center',
     margin:'auto'
   },
+  infoHeader : {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: colors.secondary,
+  },
+  infoContainer: {
+    padding: 10,
+    backgroundColor: colors.backgroundAlternative,
+    borderRadius: 10,
+    margin: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.29,
+    shadowRadius: 4.65,
+    elevation: 7,
+    alignContent: 'justify',
+  }
 });
 export default DetailsScreen
