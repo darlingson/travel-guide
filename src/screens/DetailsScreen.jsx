@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, View, Image } from "react-native";
+import { ScrollView, StyleSheet, View, Image, TouchableOpacity } from "react-native";
 import { Text } from "react-native-paper";
 import PagerView from 'react-native-pager-view';
 import colors from "../../assets/styles/colors";
@@ -19,53 +19,61 @@ function DetailsScreen({ route }) {
   let processedImageUrls = ["https://darlingson.pythonanywhere.com/destination/image?path=chingoni_2_by_unesco", "https://darlingson.pythonanywhere.com/destination/image?path=chingoni_1_by_unesco"];
   return (
     <View style={style.container}>
-    <ScrollView >
-    <View style={style.page}>
-    <PagerView initialPage={0} style={style.pager} onPageSelected={onImageSelected}>
-        {
-          processedImageUrls.map((url, index) => {
-            return (
-              <View key={index} collapsable={false}>
-                <Image source={{ uri: url }} style={style.image} />
-                {/* <Text style={style.imageNumber}>{currentPage + 1} of {processedImageUrls.length}</Text> */}
-              </View>
-            );
-          })
-        }
-      </PagerView>
-    </View>
-      <Text style={style.imageNumber}>{currentPage + 1} of {processedImageUrls.length}</Text>
-      <View style={style.infoContainer}>
-        <Text style={style.infoHeader}>Name</Text>
-        <Text>{destination.name}</Text>
-      </View>
-      <View style={style.infoContainer}>
-        <Text style={style.infoHeader}>Location</Text>
-        <Text>{destination.location}, {destination.district}</Text>
-      </View>
-      <View style={style.infoContainer}>
-        <Text style={style.infoHeader}>Description</Text>
-        <Text>{destination.description}</Text>
-      </View>
-      <View style={style.infoContainer}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-          <View style={{ padding: 10 }}>
-            {/* <Text>{destination.distance}</Text> */}
-            <Text>310 KM</Text>
-            <Text style={{ color: colors.textLight, fontSize: 12 }}>Distance from Lilongwe</Text>
-          </View>
-          <View style={{ borderLeftWidth: 1, borderRightWidth: 1, borderColor: colors.primary, padding: 10 }}>
-            <Text>K 500.00 per Person</Text>
-            {/* <Text style={{ color: colors.textLight, fontSize: 12, }}>Price</Text> */}
-          </View>
-          <View style={{ padding: 10 }}>
-            {/* <Text>{destination.distance}</Text> */}
-            <Text> <Ionicons name="sunny-outline" /> 25°C</Text>
-            {/* <Text style={{ color: colors.textLight, fontSize: 12 }}>Current Weather</Text> */}
+      <ScrollView >
+        <View style={style.page}>
+          <PagerView initialPage={0} style={style.pager} onPageSelected={onImageSelected}>
+            {
+              processedImageUrls.map((url, index) => {
+                return (
+                  <View key={index} collapsable={false}>
+                    <Image source={{ uri: url }} style={style.image} />
+                    {/* <Text style={style.imageNumber}>{currentPage + 1} of {processedImageUrls.length}</Text> */}
+                  </View>
+                );
+              })
+            }
+          </PagerView>
+        </View>
+        <Text style={style.imageNumber}>{currentPage + 1} of {processedImageUrls.length}</Text>
+        <View style={style.infoContainer}>
+          <Text style={style.infoHeader}>Name</Text>
+          <Text>{destination.name}</Text>
+        </View>
+        <View style={style.infoContainer}>
+          <Text style={style.infoHeader}>Location</Text>
+          <Text>{destination.location}, {destination.district}</Text>
+        </View>
+        <View style={style.infoContainer}>
+          <Text style={style.infoHeader}>Description</Text>
+          <Text>{destination.description}</Text>
+        </View>
+        <View style={style.infoContainer}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <View style={{ padding: 10 }}>
+              {/* <Text>{destination.distance}</Text> */}
+              <Text>310 KM</Text>
+              <Text style={{ color: colors.textLight, fontSize: 12 }}>Distance from Lilongwe</Text>
+            </View>
+            <View style={{ borderLeftWidth: 1, borderRightWidth: 1, borderColor: colors.primary, padding: 10 }}>
+              <Text>K 500.00 per Person</Text>
+              {/* <Text style={{ color: colors.textLight, fontSize: 12, }}>Price</Text> */}
+            </View>
+            <View style={{ padding: 10 }}>
+              {/* <Text>{destination.distance}</Text> */}
+              <Text> <Ionicons name="sunny-outline" /> 25°C</Text>
+              {/* <Text style={{ color: colors.textLight, fontSize: 12 }}>Current Weather</Text> */}
+            </View>
           </View>
         </View>
-      </View>
-    </ScrollView>
+        <View>
+          <TouchableOpacity style={style.button}>
+            <Text style={style.buttonText}>Book Now</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={style.button}>
+            <Text style={style.buttonText}>View On Map</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </View>
   );
 }
@@ -125,6 +133,29 @@ const style = StyleSheet.create({
     shadowRadius: 4.65,
     elevation: 7,
     alignContent: 'justify',
-  }
+  },
+  button: {
+    backgroundColor: colors.primary,
+    padding: 10,
+    borderRadius: 10,
+    margin: 10,
+  },
+  buttonText: {
+    color: colors.textLight,
+    fontSize: 18,
+    backgroundColor: colors.secondary,
+    textAlign: 'center',
+    borderRadius: 16,
+    fontWeight: 'bold',
+    padding: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.29,
+    shadowRadius: 4.65,
+    elevation: 7,
+  },
 });
 export default DetailsScreen
