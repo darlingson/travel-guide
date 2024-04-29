@@ -20,7 +20,11 @@ const HomePage = ({ navigation }) => {
         component={HomeContent}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name="DetailsScreen" component={DetailsScreen} />
+      <Stack.Screen
+        name="DetailsScreen"
+        component={DetailsScreen}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 };
