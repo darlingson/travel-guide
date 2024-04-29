@@ -99,7 +99,7 @@ function MyTabs() {
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: 'tomato',
+        tabBarActiveTintColor: '#32CD32',
         tabBarInactiveTintColor: 'gray',
       })}>
       <Tab.Screen name="Discover" component={HomeScreen} />
