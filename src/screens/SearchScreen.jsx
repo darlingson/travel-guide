@@ -86,10 +86,10 @@ const SearchScreenMainContent = () => {
       </Pressable>
     </View>
     <ScrollView horizontal>
-      <View style={styles.horizontalScroll}>
-        <Text>Hiking</Text>
-        <Text>Lakes</Text>
-        <Text>Mountains</Text>
+      <View style={{ flexDirection: 'row' , justifyContent: 'space-between'}}>
+        <Text style={{ fontWeight: 'bold', margin: 10, fontSize: 20, borderColor: 'black', borderWidth: 1, paddingLeft: 10, paddingRight: 10, borderRadius: 5, backgroundColor: colors.primary }}>Hiking</Text>
+        <Text style={{ fontWeight: 'bold', margin: 10, fontSize: 20, borderColor: 'black', borderWidth: 1, paddingLeft: 10, paddingRight: 10, borderRadius: 5, backgroundColor: colors.primary }}>Lakes</Text>
+        <Text style={{ fontWeight: 'bold', margin: 10, fontSize: 20, borderColor: 'black', borderWidth: 1, paddingLeft: 10, paddingRight: 10, borderRadius: 5, backgroundColor: colors.primary }}>Mountains</Text>
       </View>
     </ScrollView>
     <View style={styles.grid}>
